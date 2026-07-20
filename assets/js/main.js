@@ -1,28 +1,48 @@
-// ============================================
-// VIRSEN - Main JavaScript
-// Navbar, Counter, FAQ, Back to Top, Scroll
-// ============================================
+// ============================================================
+// VIRSEN - Main JavaScript v6.0
+// Enterprise Edition - Complete Functionality
+// ============================================================
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    // ---- NAVBAR HAMBURGER ----
+    // ---- LOADER ----
+    const loader = document.querySelector('.loader');
+    if (loader) {
+        setTimeout(() => {
+            loader.classList.add('hidden');
+        }, 800);
+    }
+
+    // ---- CURSOR GLOW (Desktop only) ----
+    if (window.innerWidth >= 1024) {
+        const glow = document.createElement('div');
+        glow.className = 'cursor-glow';
+        document.body.appendChild(glow);
+        
+        document.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+    }
+
+    // ---- NAVBAR ----
+    const navbar = document.getElementById('navbar');
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');
-    
+
+    // Hamburger
     if (hamburger && navLinks) {
         hamburger.addEventListener('click', function(e) {
             e.stopPropagation();
             navLinks.classList.toggle('open');
         });
 
-        // Close on outside click
         document.addEventListener('click', function(e) {
             if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
                 navLinks.classList.remove('open');
             }
         });
 
-        // Close on link click
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('open');
@@ -30,19 +50,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ---- NAVBAR SCROLL EFFECT ----
-    const navbar = document.getElementById('navbar');
-    let lastScroll = 0;
+    // Scroll effect
     window.addEventListener('scroll', function() {
-        const currentScroll = window.pageYOffset;
-        if (currentScroll > 50) {
-            navbar.style.background = 'rgba(10, 15, 30, 0.92)';
-            navbar.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
         } else {
-            navbar.style.background = 'rgba(10, 15, 30, 0.75)';
-            navbar.style.borderBottom = '1px solid rgba(255,255,255,0.02)';
+            navbar.classList.remove('scrolled');
         }
-        lastScroll = currentScroll;
     });
 
     // ---- BACK TO TOP ----
@@ -61,8 +75,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ---- COUNT-UP ANIMATION ----
-    const counters = document.querySelectorAll('.count-up');
     let countersAnimated = false;
+    const counters = document.querySelectorAll('.count-up');
 
     function animateCounters() {
         if (countersAnimated) return;
@@ -74,12 +88,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const duration = 2000;
             const startTime = performance.now();
-            const startValue = 0;
 
             function updateCounter(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                // Ease out cubic
                 const ease = 1 - Math.pow(1 - progress, 3);
                 const currentValue = Math.floor(ease * target);
                 counter.textContent = currentValue.toLocaleString();
@@ -94,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ---- REVEAL ON SCROLL (Intersection Observer) ----
+    // ---- REVEAL ON SCROLL ----
     const revealElements = document.querySelectorAll('.reveal');
 
     const revealObserver = new IntersectionObserver((entries) => {
@@ -102,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                // Check if this is a stat card with counter
                 if (entry.target.querySelector('.count-up')) {
                     hasCounters = true;
                 }
@@ -118,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     revealElements.forEach(el => revealObserver.observe(el));
 
-    // Also trigger counters if stats section is visible
+    // Stats section counter trigger
     const statsSection = document.querySelector('.stats');
     if (statsSection) {
         const statsObserver = new IntersectionObserver((entries) => {
@@ -138,9 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (question) {
             question.addEventListener('click', function() {
                 const isActive = item.classList.contains('active');
-                // Close all
                 faqItems.forEach(i => i.classList.remove('active'));
-                // Toggle current
                 if (!isActive) {
                     item.classList.add('active');
                 }
@@ -148,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ---- SMOOTH SCROLL FOR ANCHOR LINKS ----
+    // ---- SMOOTH SCROLL ----
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
@@ -176,5 +185,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    console.log('🚀 VIRSEN — Premium Website Loaded');
+    console.log('🚀 VIRSEN v6.0 — Enterprise Edition Loaded');
 });
